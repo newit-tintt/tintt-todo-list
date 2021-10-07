@@ -1,0 +1,65 @@
+/* List */
+.TodoItemList {
+  width: 420px;
+  height: 45px;
+  outline: 4px dotted black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 15px auto 0 auto;
+}
+
+/* Button */
+.btnAdd {
+  height: 45px;
+  width: 80px;
+  border-radius: 10px;
+  background-color: #dfff00;
+}
+
+.btnEdit {
+  height: 45px;
+  width: 60px;
+  border-radius: 10px;
+  background-color: #aed6f1;
+  margin-right: 2px;
+}
+
+.btnSave {
+  height: 45px;
+  width: 60px;
+  border-radius: 10px;
+  background-color: #dfff00;
+  margin-right: 2px;
+}
+
+.btnDelete {
+  height: 45px;
+  width: 60px;
+  border-radius: 10px;
+  background-color: #ffa07a;
+}
+
+/* Text */
+.inputToDoList {
+  height: 40px;
+  width: 300px;
+  min-width: 250px;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+.content {
+  height: 45px;
+  width: 280px;
+  float: left;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.updateText {
+  height: 30px;
+  width: 280px;
+  float: left;
+  text-align: left;
+  margin-top: 5px;
+}
