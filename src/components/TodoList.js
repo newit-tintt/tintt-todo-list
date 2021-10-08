@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import '../assets/css/TodoList.css';
+import todoListApi from '../api/todoListApi';
 
 class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '',
-      todoList: [
-        { id: 1, text: 'Tin code' },
-        { id: 2, text: 'Tin an com' },
-      ],
+      todoList: [],
       isEdit: false,
+      currentIndex: -1,
+      textUpdate: '',
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -20,39 +20,66 @@ class TodoList extends Component {
     this.setState({ value: event.target.value });
   }
 
-  addTodoList = () => {
+  handleAdd = async () => {
     if (this.state.value !== '') {
-      this.state.todoList.push({ text: this.state.value });
-      this.setState({
-        todoList: this.state.todoList,
-      });
+      try {
+        let idNew = 0;
+        let isSuccessCreateId = false;
+        while (isSuccessCreateId === false) {
+          let idRandom = Math.floor(Math.random() * 100);
+          const idExist = this.state.todoList.find((el) => el.id === idRandom);
+          if (!idExist) {
+            idNew = idRandom;
+            break;
+          }
+        }
+        if (idNew !== 0) {
+          await todoListApi.insert(JSON.stringify({ id: idNew, text: this.state.value }));
+          const response = await todoListApi.getAll({});
+          this.setState({ todoList: response });
+        }
+      } catch (error) {
+        console.log('---error---', error);
+      }
     }
   };
 
-  handleEdit = () => {
+  handleEdit = (index) => {
     this.setState({
       isEdit: !this.state.isEdit,
+      currentIndex: index,
     });
   };
 
-  handleSave = (index) => {
-    let text = '';
-    text = document.getElementsByClassName('updateText')[index].value;
-    if (text !== '') {
-      this.setState({
-        isEdit: !this.state.isEdit,
-      });
-      let afterUpdate = [...this.state.todoList];
-      afterUpdate[index] = { id: index, text: text };
-      this.setState({ todoList: afterUpdate });
+  handleSave = async (index, todo) => {
+    let oldText = document.getElementById('updateText').value.defaultValue;
+    let text = document.getElementById('updateText').value;
+    this.setState({
+      isEdit: !this.state.isEdit,
+    });
+
+    if (this.state.isEdit === true && this.state.currentIndex === index) {
+      if (text !== '') {
+        try {
+          const params = { id: todo.id, text: text };
+          await todoListApi.update(params);
+          const response = await todoListApi.getAll({});
+          this.setState({ todoList: response });
+        } catch (error) {
+          console.log('---error---', error);
+        }
+      }
     }
+    return oldText;
   };
 
-  removeTodo = (index) => {
-    var afterRemove = [...this.state.todoList];
-    if (index !== -1) {
-      afterRemove.splice(index, 1);
-      this.setState({ todoList: afterRemove });
+  handleDelete = async (id) => {
+    try {
+      await todoListApi.delete(id);
+      const response = await todoListApi.getAll({});
+      this.setState({ todoList: response });
+    } catch (error) {
+      console.log('---error---', error);
     }
   };
 
@@ -60,26 +87,26 @@ class TodoList extends Component {
   ToDoItemList = (props) => {
     return (
       <div>
-        {this.state.todoList.map((todo, index) => (
+        {props.todoList.map((todo, index) => (
           <div className="TodoItemList">
-            {props.isEdit ? (
-              <input type="input" className="updateText" defaultValue={todo.text} />
+            {props.isEdit && this.state.currentIndex === index ? (
+              <input type="input" className="updateText" defaultValue={todo.text} id="updateText" />
             ) : (
               <div className="content" key={index}>
                 {todo.text}
               </div>
             )}
-            {props.isEdit ? (
-              <button onClick={() => this.handleSave(index)} className="btnSave">
+            {props.isEdit && this.state.currentIndex === index ? (
+              <button onClick={() => this.handleSave(index, todo)} className="btnSave">
                 Save
               </button>
             ) : (
-              <button onClick={this.handleEdit} className="btnEdit">
+              <button onClick={() => this.handleEdit(index)} className="btnEdit">
                 {' '}
                 Edit{' '}
               </button>
             )}
-            <button className="btnDelete" onClick={() => this.removeTodo(index)}>
+            <button className="btnDelete" onClick={() => this.handleDelete(todo.id)}>
               Delete
             </button>
           </div>
@@ -88,8 +115,19 @@ class TodoList extends Component {
     );
   };
 
+  async componentDidMount() {
+    try {
+      const response = await todoListApi.getAll({ params: {} });
+      this.setState({ todoList: response });
+    } catch (error) {
+      console.log('---error---', error);
+    }
+  }
+
   render() {
     let ToDoItemList = this.ToDoItemList;
+    let todoList = this.state.todoList;
+
     return (
       <div className="TodoList">
         <h1>TodoList</h1>
@@ -100,10 +138,10 @@ class TodoList extends Component {
           value={this.state.value}
           onChange={this.handleChange}
         />
-        <button onClick={this.addTodoList} className="btnAdd">
+        <button onClick={this.handleAdd} className="btnAdd">
           Add
         </button>
-        <ToDoItemList isEdit={this.state.isEdit} todo={this.state.todoList} className="TodoItemList" />
+        <ToDoItemList isEdit={this.state.isEdit} todoList={todoList} className="TodoItemList" />
       </div>
     );
   }
