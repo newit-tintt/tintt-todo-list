@@ -1,0 +1,21 @@
+{# purchase.html.twig #}
+{% extends 'base.html.twig' %}
+    {% block title %} Page {% endblock %}
+
+    {% block body %}
+        <h1> Page Checkout </h1>
+        <p> Checkout successfully </p>
+        <p> Ở đây chứa cái form điền thông tin thanh toán. xong rồi nhận submit là nó chạy hàm purchase </p>
+        <form id="ninja_forms_form_1">
+            <label for="bank">Bank:</label><br>
+            <input type="text" id="bank" name="bank" value="Vietcombank"><br>
+            <label for="atm">ATM Number:</label><br>
+            <input type="text" id="atm" name="atm" value="123456789"><br><br>
+            <input type="button" value="Submit" onclick='toPurchasePage()'>
+        </form>
+        <script>
+            function toPurchasePage() {
+                window.location.href = 'purchase'
+            }
+        </script>
+    {% endblock %}

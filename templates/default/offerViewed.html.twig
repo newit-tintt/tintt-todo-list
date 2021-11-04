@@ -1,0 +1,36 @@
+{# purchase.html.twig #}
+{% extends 'base.html.twig' %}
+    {% block title %} Offer View Page {% endblock %}
+
+    {% block body %}
+        <h1> Offer View Page </h1>
+        <button id='checkout_btn' type='button' onclick='onCheckout()'>Checkout</button>
+        <script>
+            /**
+            * A function to handle a click on a checkout button. This function uses the eventCallback
+            * data layer variable to handle navigation after the ecommerce data has been sent to Google Analytics.
+            */
+            function onCheckout() {
+                let dataLayer = window.dataLayer || [];
+                dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+                dataLayer.push({
+                    'event': 'checkout',
+                    'ecommerce': {
+                        'checkout': {
+                            'products': [{
+                                "name": "トイ・ストーリー リアルサイズトーキングフィギュア バズ・ライトイヤー(リミックス版)フィギュア 3歳 トイストーリー",
+                                "id": "esdigital_10853021",
+                                "price": "5360",
+                                "serviceType": "Yahoo! Japan Shopping",
+                                "category": "ショッピング/ゲーム、おもちゃ/フィギュア/コミック、アニメ/その他",
+                                "partnerSellerId": "esdigital",
+                                "quantity": "1",
+                                "dimension1": null,
+                                "dimension2": null
+                            }]
+                        }
+                    }, 
+                });
+            }
+        </script>
+    {% endblock %}

@@ -1,0 +1,20 @@
+{# purchase.html.twig #}
+{% extends 'base.html.twig' %}
+    {% block title %} Refund {% endblock %}
+
+    {% block body %}
+        <h1> Như một nhát dao </h1>
+        <script>
+            // Refund an entire transaction by providing the transaction ID. This example assumes the details
+            // of the completed refund are available when the page loads:
+            let dataLayer = window.dataLayer || [];
+            dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+            dataLayer.push({
+                'ecommerce': {
+                    'refund': {
+                        'actionField': {'id': '2911'}         // Transaction ID. Required for purchases and refunds.
+                    }
+                }
+            });
+        </script>
+    {% endblock %}

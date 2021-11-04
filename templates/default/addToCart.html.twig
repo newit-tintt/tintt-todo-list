@@ -1,0 +1,76 @@
+{# purchase.html.twig #}
+{% extends 'base.html.twig' %}
+    {% block title %} addToCart {% endblock %}
+
+    {% block body %}
+        <h1> Add To Cart </h1>
+        <button type='button' onclick='addToCart1()'>addToCart1</button>
+        <button type='button' onclick='addToCart2()'>addToCart2</button>
+        <button type='button' onclick='removeFromCart2()'>removeFromCart2</button>
+        <script>
+            function addToCart1() {
+                let dataLayer = window.dataLayer || [];
+                dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+                dataLayer.push({
+                    'event': 'addToCart',
+                    'ecommerce': {
+                        'currencyCode': 'EUR',
+                        'add': {                                // 'add' actionFieldObject measures.
+                            'products': [{                        //  adding a product to a shopping cart.
+                                'name': 'T-Shirt 1',
+                                'id': '1',
+                                'price': '1',
+                                'brand': 'Google',
+                                'category': 'Apparel',
+                                'variant': 'Gray',
+                                'quantity': 1
+                            }]
+                        }
+                    }
+                });   
+            }
+            function addToCart2() {
+                let dataLayer = window.dataLayer || [];
+                dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+                dataLayer.push({
+                    'event': 'addToCart',
+                    'ecommerce': {
+                        'currencyCode': 'EUR',
+                        'add': {                                // 'add' actionFieldObject measures.
+                            'products': [{                        //  adding a product to a shopping cart.
+                                'name': 'T-Shirt 2',
+                                'id': '2',
+                                'price': '2',
+                                'brand': 'Google',
+                                'category': 'Apparel',
+                                'variant': 'Gray',
+                                'quantity': 1
+                            }]
+                        }
+                    }
+                });   
+            }
+            function removeFromCart2() {
+                let dataLayer = window.dataLayer || [];
+                // Measure the removal of a product from a shopping cart.
+                dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+                dataLayer.push({
+                'event': 'removeFromCart',
+                'ecommerce': {
+                    'remove': {                               // 'remove' actionFieldObject measures.
+                        'products': [{                          //  removing a product to a shopping cart.
+                            'name': 'T-Shirt 2',
+                            'id': '2',
+                            'price': '2',
+                            'brand': 'Google',
+                            'category': 'Apparel',
+                            'variant': 'Gray',
+                            'quantity': 1
+                        }]
+                    }
+                }
+                });      
+            }
+             
+        </script>
+    {% endblock %}
